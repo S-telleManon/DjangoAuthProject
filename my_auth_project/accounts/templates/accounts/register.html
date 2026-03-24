@@ -26,12 +26,28 @@
       {% csrf_token %}
       <h1>Create Account</h1>
 
-      {{ form.username }}
+      {% comment %} {{ form.username }}
       {{ form.first_name }}
       {{ form.last_name }}
       {{ form.email }}
       {{ form.password1 }}
-      {{ form.password2 }}
+      {{ form.password2 }} {% endcomment %}
+       <!-- Replace the individual fields with this -->
+      {% for field in form %}
+        <div>
+          {{ field.label_tag }}
+          {{ field }}
+          {% for error in field.errors %}
+            <p class="error">{{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endfor %}
+
+      {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+          <p class="error">{{ error }}</p>
+        {% endfor %}
+      {% endif %}
 
       <button type="submit">Sign Up</button>
     </form>

@@ -22,6 +22,7 @@ def register_view(request):
             return redirect("login")
     else:
         form = RegisterForm()
+        print("Form errors:", form.errors)
 
     return render(request, "accounts/register.html", {"form": form})
 def logout_view(request):

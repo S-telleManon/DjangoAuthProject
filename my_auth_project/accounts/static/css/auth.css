@@ -1,0 +1,163 @@
+* {
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+h1{
+  text-align: center;
+}
+body {
+  background: #f6f5f7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* CONTAINER */
+.container {
+  background: #fff;
+  width: 900px;
+  max-width: 100%;
+  min-height: 550px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+
+/* FORM SECTIONS */
+.form-container {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 50%;
+  transition: all 0.6s ease-in-out;
+}
+
+.sign-in-container {
+  left: 0;
+  z-index: 2;
+}
+
+.sign-up-container {
+  left: 0;
+  opacity: 0;
+  z-index: 1;
+}
+
+/* ANIMATION */
+.container.right-panel-active .sign-in-container {
+  transform: translateX(100%);
+}
+
+.container.right-panel-active .sign-up-container {
+  transform: translateX(100%);
+  opacity: 1;
+  z-index: 5;
+}
+
+/* FORM STYLE */
+form {
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+  height: 100%;
+  justify-content: center;
+}
+
+input {
+  margin: 8px 0;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+input:focus {
+  outline: none;
+  border-color: #1c1142;
+}
+
+button {
+  margin-top: 10px;
+  padding: 12px;
+  border: none;
+  background: #1a0b3d;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button.ghost {
+  background: transparent;
+  border: 1px solid #fff;
+}
+
+/* OVERLAY */
+.overlay-container {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  transition: transform 0.6s ease-in-out;
+  z-index: 100;
+}
+
+.container.right-panel-active .overlay-container {
+  transform: translateX(-100%);
+}
+
+.overlay {
+  background: linear-gradient(to right, #230e5f, #8b6ddf);
+  color: #fff;
+  position: relative;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  display: flex;
+  transition: transform 0.6s ease-in-out;
+}
+
+.container.right-panel-active .overlay {
+  transform: translateX(50%);
+}
+
+.overlay-panel {
+  width: 50%;
+  padding: 40px;
+  text-align: center;
+}
+
+/* MESSAGES */
+.messages {
+  position: fixed;       /* stay on top */
+  top: 20px;             /* distance from top of screen */
+  left: 50%;             /* center horizontally */
+  transform: translateX(-50%);
+  z-index: 9999;         /* above everything */
+  width: 90%;            /* responsive width */
+  max-width: 500px;
+}
+
+.messages p {
+  background-color: #4BB543; /* green for success */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  text-align: center;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+}
+/* CENTER CONTENT IN OVERLAY PANELS */
+.overlay-panel.overlay-right,
+.overlay-panel.overlay-left {
+  display: flex;               /* flex layout */
+  flex-direction: column;      /* stack elements vertically */
+  justify-content: center;     /* vertical centering */
+  align-items: center;         /* horizontal centering */
+  text-align: center;          /* center text */
+  height: 100%;                /* fill panel height */
+}

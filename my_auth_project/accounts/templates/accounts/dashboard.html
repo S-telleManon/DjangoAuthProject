@@ -1,0 +1,192 @@
+{% comment %} <h2>Welcome, {{ user.first_name }}!</h2>
+<p>Username: {{ user.username }}</p>
+<p>Email: {{ user.email }}</p>
+
+<form method="POST" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">Logout</button>
+</form> {% endcomment %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Alpine.js (for animations) -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        body {
+            background-color: #0f172a;
+        }
+    </style>
+</head>
+
+<body class="text-white" x-data="{ open: true }">
+
+<div class="flex h-screen">
+
+    <!-- SIDEBAR -->
+    <aside 
+        :class="open ? 'w-64' : 'w-20'" 
+        class="bg-slate-900 p-5 transition-all duration-300">
+
+        <button @click="open = !open" class="mb-6">
+            ☰
+        </button>
+
+        <h2 x-show="open" 
+            x-transition 
+            class="text-2xl font-bold mb-8">
+            ⚡ ABC Company
+        </h2>
+
+        <nav class="space-y-4">
+            <a href="#" class="block p-2 rounded hover:bg-slate-700 transition">
+                📊 <span x-show="open">Dashboard</span>
+            </a>
+            <a href="#" class="block p-2 rounded hover:bg-slate-700 transition">
+                📦 <span x-show="open">Products</span>
+            </a>
+            <a href="#" class="block p-2 rounded hover:bg-slate-700 transition">
+                📈 <span x-show="open">Analytics</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="flex-1 flex flex-col">
+
+        <!-- TOPBAR -->
+        <header class="bg-slate-800 p-4 flex justify-between items-center shadow-lg">
+            <h1 class="text-xl font-semibold">Dashboard</h1>
+
+            <div class="flex items-center gap-4" x-data="{ open: false }">
+
+                <!-- PROFILE BUTTON -->
+                <div class="relative">
+                    <div 
+                        @click="open = !open"
+                        class="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center cursor-pointer hover:scale-110 transition font-semibold text-white text-sm">
+
+                        <!-- Initials -->
+                        {% with request.user.first_name|default:"?" as first %}
+                        {% with request.user.last_name|default:"?" as last %}
+                            {{ first|slice:":1" }}{{ last|slice:":1" }}
+                        {% endwith %}
+                        {% endwith %}
+
+                    </div>
+
+                    <!-- DROPDOWN -->
+                    <div 
+                        x-show="open"
+                        @click.outside="open = false"
+                        x-transition
+                        class="absolute right-0 mt-2 w-48 bg-slate-900 rounded-xl shadow-lg overflow-hidden">
+
+                        <!-- USER INFO -->
+                        <div class="p-3 border-b border-slate-700">
+                            <p class="font-semibold">{{ request.user.username }}</p>
+                            <p class="text-sm text-gray-400">{{ request.user.email }}</p>
+                        </div>
+
+                        <!-- MENU ITEMS -->
+                        <a href="#" class="block px-4 py-2 hover:bg-slate-700 transition">
+                            👤 Profile
+                        </a>
+
+                        <form method="POST" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="block px-4 py-2 hover:bg-red-600 hover:text-white w-full text-left">
+                                🚪 Logout
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+        </header>
+
+        <!-- CONTENT -->
+        <main class="p-6 overflow-y-auto space-y-6">
+
+            <!-- HERO -->
+            <div 
+                x-data="{ show: false }"
+                x-init="setTimeout(() => show = true, 200)"
+                x-show="show"
+                x-transition:enter="transition ease-out duration-700"
+                x-transition:enter-start="opacity-0 translate-y-5"
+                x-transition:enter-end="opacity-100 translate-y-0"
+                class="bg-gradient-to-r from-purple-600 to-indigo-600 p-6 rounded-xl shadow-lg"
+            >
+                <h2 class="text-2xl font-bold">Welcome back 👋</h2>
+                <p class="text-gray-200">Here’s your live dashboard</p>
+            </div>
+
+            <!-- CARDS -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                <div class="bg-slate-800 p-4 rounded-xl hover:scale-105 transition transform shadow-md">
+                    <h3 class="text-gray-400">Revenue</h3>
+                    <p class="text-2xl font-bold">$12,500</p>
+                </div>
+
+                <div class="bg-slate-800 p-4 rounded-xl hover:scale-105 transition transform shadow-md">
+                    <h3 class="text-gray-400">Users</h3>
+                    <p class="text-2xl font-bold">1,240</p>
+                </div>
+
+                <div class="bg-slate-800 p-4 rounded-xl hover:scale-105 transition transform shadow-md">
+                    <h3 class="text-gray-400">Orders</h3>
+                    <p class="text-2xl font-bold">320</p>
+                </div>
+
+            </div>
+
+            <!-- TABLE -->
+            <div class="bg-slate-800 p-4 rounded-xl shadow-lg">
+                <h3 class="mb-4 text-lg font-semibold">Products</h3>
+
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="text-gray-400 border-b border-gray-700">
+                            <th class="py-2">Product</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr class="border-b border-gray-700 hover:bg-slate-700 transition">
+                            <td class="py-2">Dashboard UI</td>
+                            <td>Template</td>
+                            <td class="text-green-400">Active</td>
+                            <td>$49</td>
+                        </tr>
+
+                        <tr class="border-b border-gray-700 hover:bg-slate-700 transition">
+                            <td class="py-2">Admin Panel</td>
+                            <td>Software</td>
+                            <td class="text-yellow-400">Draft</td>
+                            <td>$99</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+
+    </div>
+
+</div>
+
+</body>
+</html>
